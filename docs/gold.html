@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="JDRK" />
+
+<meta name="date" content="2024-09-19" />
+
+<title>Gold_Sivler_Model</title>
+
+<script src="site_libs/header-attrs-2.28/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Gold_Sivler_Model</h1>
+<h4 class="author">JDRK</h4>
+<h4 class="date">2024-09-19</h4>
+
+</div>
+
+
+<div id="gold-forecast-model" class="section level3">
+<h3>Gold Forecast Model</h3>
+<div id="htmlwidget-a9221b03bcc9ce88f68f" style="width:800px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a9221b03bcc9ce88f68f">{"x":{"data":[{"x":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"y":[2729.8035332802783,2775.5572328828321,2810.695119279821,2840.3422055274118,2866.483205867959,2890.1357564837513,2911.9042275561424,2932.1822986224411,2951.2433496012791,2969.2863749498747,2986.4615602212293,3002.8855541807225,3018.6510972385481,3033.8333633307002],"text":["Date: 2024-11-01<br />Prices: 2729.804<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2024-12-01<br />Prices: 2775.557<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-01-01<br />Prices: 2810.695<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-02-01<br />Prices: 2840.342<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-03-01<br />Prices: 2866.483<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-04-01<br />Prices: 2890.136<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-05-01<br />Prices: 2911.904<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-06-01<br />Prices: 2932.182<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-07-01<br />Prices: 2951.243<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-08-01<br />Prices: 2969.286<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-09-01<br />Prices: 2986.462<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-10-01<br />Prices: 3002.886<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-11-01<br />Prices: 3018.651<br />Levels: Hi.80<br />Levels: Hi.80","Date: 2025-12-01<br />Prices: 3033.833<br />Levels: Hi.80<br />Levels: Hi.80"],"type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(211,84,0,1)","dash":"solid"},"hoveron":"points","name":"Hi.80","legendgroup":"Hi.80","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"y":[2788.2331757764327,2858.2074208957556,2911.9461807572775,2957.2874864480382,2997.2666964656619,3033.4401510466823,3066.7321546206917,3097.7447880834743,3126.8961499407933,3154.4905759523303,3180.7577551004069,3205.8760862767499,3229.9874036991769,3253.2066759815807],"text":["Date: 2024-11-01<br />Prices: 2788.233<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2024-12-01<br />Prices: 2858.207<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-01-01<br />Prices: 2911.946<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-02-01<br />Prices: 2957.287<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-03-01<br />Prices: 2997.267<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-04-01<br />Prices: 3033.440<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-05-01<br />Prices: 3066.732<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-06-01<br />Prices: 3097.745<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-07-01<br />Prices: 3126.896<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-08-01<br />Prices: 3154.491<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-09-01<br />Prices: 3180.758<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-10-01<br />Prices: 3205.876<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-11-01<br />Prices: 3229.987<br />Levels: Hi.95<br />Levels: Hi.95","Date: 2025-12-01<br />Prices: 3253.207<br />Levels: Hi.95<br />Levels: Hi.95"],"type":"scatter","mode":"lines","line":{"width":3.7795275590551185,"color":"rgba(22,160,133,1)","dash":"solid"},"hoveron":"points","name":"Hi.95","legendgroup":"Hi.95","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1730419200,1730419200,1733011200,1733011200,1735689600,1735689600,1738368000,1738368000,1740787200,1740787200,1743465600,1743465600,1746057600,1746057600,1748736000,1748736000,1751328000,1751328000,1754006400,1754006400,1756684800,1756684800,1759276800,1759276800,1761955200,1761955200,1764547200,1764547200],"y":[2729.8035332802783,2788.2331757764327,2775.5572328828321,2858.2074208957556,2810.695119279821,2911.9461807572775,2840.3422055274118,2957.2874864480382,2866.483205867959,2997.2666964656619,2890.1357564837513,3033.4401510466823,2911.9042275561424,3066.7321546206917,2932.1822986224411,3097.7447880834743,2951.2433496012791,3126.8961499407933,2969.2863749498747,3154.4905759523303,2986.4615602212293,3180.7577551004069,3002.8855541807225,3205.8760862767499,3018.6510972385481,3229.9874036991769,3033.8333633307002,3253.2066759815807],"text":["Date: 2024-11-01<br />Prices: 2729.804<br />Levels: black<br />Levels: Hi.80","Date: 2024-11-01<br />Prices: 2788.233<br />Levels: black<br />Levels: Hi.95","Date: 2024-12-01<br />Prices: 2775.557<br />Levels: black<br />Levels: Hi.80","Date: 2024-12-01<br />Prices: 2858.207<br />Levels: black<br />Levels: Hi.95","Date: 2025-01-01<br />Prices: 2810.695<br />Levels: black<br />Levels: Hi.80","Date: 2025-01-01<br />Prices: 2911.946<br />Levels: black<br />Levels: Hi.95","Date: 2025-02-01<br />Prices: 2840.342<br />Levels: black<br />Levels: Hi.80","Date: 2025-02-01<br />Prices: 2957.287<br />Levels: black<br />Levels: Hi.95","Date: 2025-03-01<br />Prices: 2866.483<br />Levels: black<br />Levels: Hi.80","Date: 2025-03-01<br />Prices: 2997.267<br />Levels: black<br />Levels: Hi.95","Date: 2025-04-01<br />Prices: 2890.136<br />Levels: black<br />Levels: Hi.80","Date: 2025-04-01<br />Prices: 3033.440<br />Levels: black<br />Levels: Hi.95","Date: 2025-05-01<br />Prices: 2911.904<br />Levels: black<br />Levels: Hi.80","Date: 2025-05-01<br />Prices: 3066.732<br />Levels: black<br />Levels: Hi.95","Date: 2025-06-01<br />Prices: 2932.182<br />Levels: black<br />Levels: Hi.80","Date: 2025-06-01<br />Prices: 3097.745<br />Levels: black<br />Levels: Hi.95","Date: 2025-07-01<br />Prices: 2951.243<br />Levels: black<br />Levels: Hi.80","Date: 2025-07-01<br />Prices: 3126.896<br />Levels: black<br />Levels: Hi.95","Date: 2025-08-01<br />Prices: 2969.286<br />Levels: black<br />Levels: Hi.80","Date: 2025-08-01<br />Prices: 3154.491<br />Levels: black<br />Levels: Hi.95","Date: 2025-09-01<br />Prices: 2986.462<br />Levels: black<br />Levels: Hi.80","Date: 2025-09-01<br />Prices: 3180.758<br />Levels: black<br />Levels: Hi.95","Date: 2025-10-01<br />Prices: 3002.886<br />Levels: black<br />Levels: Hi.80","Date: 2025-10-01<br />Prices: 3205.876<br />Levels: black<br />Levels: Hi.95","Date: 2025-11-01<br />Prices: 3018.651<br />Levels: black<br />Levels: Hi.80","Date: 2025-11-01<br />Prices: 3229.987<br />Levels: black<br />Levels: Hi.95","Date: 2025-12-01<br />Prices: 3033.833<br />Levels: black<br />Levels: Hi.80","Date: 2025-12-01<br />Prices: 3253.207<br />Levels: black<br />Levels: Hi.95"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":3.7795275590551185,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":39.622526636225267,"r":7.3059360730593621,"b":23.02476823024768,"l":44.167704441677039},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"<b> Gold Forecast Model Next 14 Month <\/b>","font":{"color":"rgba(44,62,80,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1728712800,1766253600],"tickmode":"array","ticktext":["Nov24","Dec24","Jan25","Feb25","Mar25","Apr25","May25","Jun25","Jul25","Aug25","Sep25","Oct25","Nov25","Dec25"],"tickvals":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"categoryorder":"array","categoryarray":["Nov24","Dec24","Jan25","Feb25","Mar25","Apr25","May25","Jun25","Jul25","Aug25","Sep25","Oct25","Nov25","Dec25"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835198},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"<b>  <\/b>","font":{"color":"rgba(44,62,80,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[2703.6333761452133,3279.3768331166457],"tickmode":"array","ticktext":["2,800","2,900","3,000","3,100","3,200"],"tickvals":[2800,2900,3000,3100,3200],"categoryorder":"array","categoryarray":["2,800","2,900","3,000","3,100","3,200"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":13.283520132835198},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"<b>  <\/b>","font":{"color":"rgba(44,62,80,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"Levels","font":{"color":"rgba(44,62,80,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","width":800,"barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"172413002cedd":{"x":{},"y":{},"colour":{},"type":"scatter"},"172417f18ad27":{"x":{},"y":{},"colour":{}}},"cur_data":"172413002cedd","visdat":{"172413002cedd":["function (y) ","x"],"172417f18ad27":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="kmnjeangej" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kmnjeangej table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kmnjeangej thead, #kmnjeangej tbody, #kmnjeangej tfoot, #kmnjeangej tr, #kmnjeangej td, #kmnjeangej th {
+  border-style: none;
+}
+
+#kmnjeangej p {
+  margin: 0;
+  padding: 0;
+}
+
+#kmnjeangej .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kmnjeangej .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kmnjeangej .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kmnjeangej .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kmnjeangej .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kmnjeangej .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kmnjeangej .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kmnjeangej .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kmnjeangej .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kmnjeangej .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kmnjeangej .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kmnjeangej .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kmnjeangej .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kmnjeangej .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kmnjeangej .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmnjeangej .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kmnjeangej .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kmnjeangej .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kmnjeangej .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmnjeangej .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kmnjeangej .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmnjeangej .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kmnjeangej .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmnjeangej .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kmnjeangej .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kmnjeangej .gt_left {
+  text-align: left;
+}
+
+#kmnjeangej .gt_center {
+  text-align: center;
+}
+
+#kmnjeangej .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kmnjeangej .gt_font_normal {
+  font-weight: normal;
+}
+
+#kmnjeangej .gt_font_bold {
+  font-weight: bold;
+}
+
+#kmnjeangej .gt_font_italic {
+  font-style: italic;
+}
+
+#kmnjeangej .gt_super {
+  font-size: 65%;
+}
+
+#kmnjeangej .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kmnjeangej .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kmnjeangej .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kmnjeangej .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kmnjeangej .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kmnjeangej .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kmnjeangej .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#kmnjeangej .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#kmnjeangej div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_title gt_font_normal" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Gold Forecast Arima Model </td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Focus Data Period : Oct 2014 - Sep 2024</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id=""></th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="DATE">DATE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.80">HI.80</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.95">HI.95</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr class="gt_group_heading_row">
+      <th colspan="4" class="gt_group_heading" style="background-color: #F1F1F1; font-weight: bold;" scope="colgroup" id="2024">2024</th>
+    </tr>
+    <tr class="gt_row_group_first"><th id="stub_1_1" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2024 stub_1_1 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Nov 2024</td>
+<td headers="2024 stub_1_1 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,729.80</td>
+<td headers="2024 stub_1_1 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,788.23</td></tr>
+    <tr><th id="stub_1_2" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2024 stub_1_2 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Dec 2024</td>
+<td headers="2024 stub_1_2 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,775.56</td>
+<td headers="2024 stub_1_2 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,858.21</td></tr>
+    <tr><th id="summary_stub_2024_1" scope="row" class="gt_row gt_left gt_stub gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">Average</th>
+<td headers="2024 summary_stub_2024_1 Date" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">—</td>
+<td headers="2024 summary_stub_2024_1 Hi.80" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">2752.680</td>
+<td headers="2024 summary_stub_2024_1 Hi.95" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">2823.220</td></tr>
+    <tr class="gt_group_heading_row">
+      <th colspan="4" class="gt_group_heading" style="background-color: #F1F1F1; font-weight: bold;" scope="colgroup" id="2025">2025</th>
+    </tr>
+    <tr class="gt_row_group_first"><th id="stub_1_3" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_3 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Jan 2025</td>
+<td headers="2025 stub_1_3 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,810.70</td>
+<td headers="2025 stub_1_3 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,911.95</td></tr>
+    <tr><th id="stub_1_4" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_4 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Feb 2025</td>
+<td headers="2025 stub_1_4 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,840.34</td>
+<td headers="2025 stub_1_4 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,957.29</td></tr>
+    <tr><th id="stub_1_5" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_5 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Mar 2025</td>
+<td headers="2025 stub_1_5 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,866.48</td>
+<td headers="2025 stub_1_5 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,997.27</td></tr>
+    <tr><th id="stub_1_6" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_6 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Apr 2025</td>
+<td headers="2025 stub_1_6 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,890.14</td>
+<td headers="2025 stub_1_6 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,033.44</td></tr>
+    <tr><th id="stub_1_7" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_7 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">May 2025</td>
+<td headers="2025 stub_1_7 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,911.90</td>
+<td headers="2025 stub_1_7 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,066.73</td></tr>
+    <tr><th id="stub_1_8" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_8 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Jun 2025</td>
+<td headers="2025 stub_1_8 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,932.18</td>
+<td headers="2025 stub_1_8 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,097.74</td></tr>
+    <tr><th id="stub_1_9" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_9 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Jul 2025</td>
+<td headers="2025 stub_1_9 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,951.24</td>
+<td headers="2025 stub_1_9 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,126.90</td></tr>
+    <tr><th id="stub_1_10" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_10 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Aug 2025</td>
+<td headers="2025 stub_1_10 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,969.29</td>
+<td headers="2025 stub_1_10 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,154.49</td></tr>
+    <tr><th id="stub_1_11" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_11 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Sep 2025</td>
+<td headers="2025 stub_1_11 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">2,986.46</td>
+<td headers="2025 stub_1_11 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,180.76</td></tr>
+    <tr><th id="stub_1_12" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_12 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Oct 2025</td>
+<td headers="2025 stub_1_12 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,002.89</td>
+<td headers="2025 stub_1_12 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,205.88</td></tr>
+    <tr><th id="stub_1_13" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_13 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Nov 2025</td>
+<td headers="2025 stub_1_13 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,018.65</td>
+<td headers="2025 stub_1_13 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,229.99</td></tr>
+    <tr><th id="stub_1_14" scope="row" class="gt_row gt_left gt_stub"></th>
+<td headers="2025 stub_1_14 Date" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">Dec 2025</td>
+<td headers="2025 stub_1_14 Hi.80" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,033.83</td>
+<td headers="2025 stub_1_14 Hi.95" class="gt_row gt_right" style="color: #967E76; text-align: center; font-weight: bold;">3,253.21</td></tr>
+    <tr><th id="summary_stub_2025_1" scope="row" class="gt_row gt_left gt_stub gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">Average</th>
+<td headers="2025 summary_stub_2025_1 Date" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">—</td>
+<td headers="2025 summary_stub_2025_1 Hi.80" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">2934.509</td>
+<td headers="2025 summary_stub_2025_1 Hi.95" class="gt_row gt_right gt_summary_row gt_first_summary_row thick gt_last_summary_row" style="background-color: #F6E6CB; text-align: center; font-weight: bold;">3101.303</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+<div id="silver-last-detect-model" class="section level3">
+<h3>Silver Last Detect Model</h3>
+<p><img src="gold_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="htmlwidget-c5943d54ef213804ccdc" style="width:800px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-c5943d54ef213804ccdc">{"x":{"data":[{"x":[1704067200,1706745600,1709251200,1711929600,1714521600,1717200000,1719792000,1722470400,1725148800,1727740800],"y":[26.539946813412271,27.464471554852715,28.176640346156734,28.779331624809615,29.312344114012941,29.796063769527883,30.242586042225192,30.659782327669006,31.053113639053461,31.426551457248468],"text":["mn: 2024-01-01<br />prices: 26.53995<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-02-01<br />prices: 27.46447<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-03-01<br />prices: 28.17664<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-04-01<br />prices: 28.77933<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-05-01<br />prices: 29.31234<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-06-01<br />prices: 29.79606<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-07-01<br />prices: 30.24259<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-08-01<br />prices: 30.65978<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-09-01<br />prices: 31.05311<br />levels: Hi.80<br />levels: Hi.80","mn: 2024-10-01<br />prices: 31.42655<br />levels: Hi.80<br />levels: Hi.80"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(48,51,107,1)","dash":"solid"},"hoveron":"points","name":"Hi.80","legendgroup":"Hi.80","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(48,51,107,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(48,51,107,1)"}},"frame":null},{"x":[1704067200,1706745600,1709251200,1711929600,1714521600,1717200000,1719792000,1722470400,1725148800,1727740800],"y":[27.716592310698118,29.130530886996794,30.219699063601645,31.141435833088604,31.956608090089922,32.696393463470912,33.379290349020579,34.017337007413353,34.618885337603125,35.190009195437433],"text":["mn: 2024-01-01<br />prices: 27.71659<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-02-01<br />prices: 29.13053<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-03-01<br />prices: 30.21970<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-04-01<br />prices: 31.14144<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-05-01<br />prices: 31.95661<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-06-01<br />prices: 32.69639<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-07-01<br />prices: 33.37929<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-08-01<br />prices: 34.01734<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-09-01<br />prices: 34.61889<br />levels: Hi.95<br />levels: Hi.95","mn: 2024-10-01<br />prices: 35.19001<br />levels: Hi.95<br />levels: Hi.95"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(106,176,76,1)","dash":"solid"},"hoveron":"points","name":"Hi.95","legendgroup":"Hi.95","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(106,176,76,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(106,176,76,1)"}},"frame":null},{"x":[1704067200,1706745600,1709251200,1711929600,1714521600,1717200000,1719792000,1722470400,1725148800,1727740800],"y":[23.908260869565218,22.948681818181818,23.926590909090908,26.510047619047619,28.176304347826086,31.043863636363636,30.641636363636362,28.807304347826086,29.543272727272729,30.977250000000002],"text":["mn: 2024-01-01<br />prices: 23.90826<br />levels: price<br />levels: price","mn: 2024-02-01<br />prices: 22.94868<br />levels: price<br />levels: price","mn: 2024-03-01<br />prices: 23.92659<br />levels: price<br />levels: price","mn: 2024-04-01<br />prices: 26.51005<br />levels: price<br />levels: price","mn: 2024-05-01<br />prices: 28.17630<br />levels: price<br />levels: price","mn: 2024-06-01<br />prices: 31.04386<br />levels: price<br />levels: price","mn: 2024-07-01<br />prices: 30.64164<br />levels: price<br />levels: price","mn: 2024-08-01<br />prices: 28.80730<br />levels: price<br />levels: price","mn: 2024-09-01<br />prices: 29.54327<br />levels: price<br />levels: price","mn: 2024-10-01<br />prices: 30.97725<br />levels: price<br />levels: price"],"type":"scatter","mode":"lines+markers","line":{"width":3.7795275590551185,"color":"rgba(235,77,75,1)","dash":"solid"},"hoveron":"points","name":"price","legendgroup":"price","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":"rgba(235,77,75,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(235,77,75,1)"}},"frame":null}],"layout":{"margin":{"t":39.622526636225267,"r":7.3059360730593621,"b":21.430745814307464,"l":34.337899543379002},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"Silver Detect Last 10 Months Prices Model","font":{"color":"rgba(0,0,0,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1702883520,1728924480],"tickmode":"array","ticktext":["January","February","March","April","May","June","July","August","September","October"],"tickvals":[1704067200,1706745600,1709251200,1711929600,1714521600,1717200000,1719792000,1722470400,1725148800,1727740800],"categoryorder":"array","categoryarray":["January","February","March","April","May","June","July","August","September","October"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"y","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[22.336615449319037,35.80207556430021],"tickmode":"array","ticktext":["22.5","25.0","27.5","30.0","32.5","35.0"],"tickvals":[22.5,25,27.5,30,32.5,35],"categoryorder":"array","categoryarray":["22.5","25.0","27.5","30.0","32.5","35.0"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":true,"linecolor":"rgba(0,0,0,1)","linewidth":0.66417600664176002,"showgrid":false,"gridcolor":null,"gridwidth":0,"zeroline":false,"anchor":"x","title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":null,"line":{"color":null,"width":0,"linetype":[]},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"levels","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","width":800,"barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"172416d542575":{"x":{},"y":{},"colour":{},"type":"scatter"},"1724168ea75e5":{"x":{},"y":{},"colour":{}}},"cur_data":"172416d542575","visdat":{"172416d542575":["function (y) ","x"],"1724168ea75e5":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="kweglgjhih" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#kweglgjhih table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#kweglgjhih thead, #kweglgjhih tbody, #kweglgjhih tfoot, #kweglgjhih tr, #kweglgjhih td, #kweglgjhih th {
+  border-style: none;
+}
+
+#kweglgjhih p {
+  margin: 0;
+  padding: 0;
+}
+
+#kweglgjhih .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#kweglgjhih .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#kweglgjhih .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#kweglgjhih .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#kweglgjhih .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#kweglgjhih .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#kweglgjhih .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#kweglgjhih .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#kweglgjhih .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#kweglgjhih .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#kweglgjhih .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#kweglgjhih .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#kweglgjhih .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#kweglgjhih .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#kweglgjhih .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kweglgjhih .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#kweglgjhih .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#kweglgjhih .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#kweglgjhih .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kweglgjhih .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#kweglgjhih .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kweglgjhih .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#kweglgjhih .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kweglgjhih .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#kweglgjhih .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#kweglgjhih .gt_left {
+  text-align: left;
+}
+
+#kweglgjhih .gt_center {
+  text-align: center;
+}
+
+#kweglgjhih .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#kweglgjhih .gt_font_normal {
+  font-weight: normal;
+}
+
+#kweglgjhih .gt_font_bold {
+  font-weight: bold;
+}
+
+#kweglgjhih .gt_font_italic {
+  font-style: italic;
+}
+
+#kweglgjhih .gt_super {
+  font-size: 65%;
+}
+
+#kweglgjhih .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#kweglgjhih .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#kweglgjhih .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#kweglgjhih .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#kweglgjhih .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#kweglgjhih .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#kweglgjhih .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#kweglgjhih .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#kweglgjhih div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="6" class="gt_heading gt_title gt_font_normal" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Detect Last 10 Months Model</td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="6" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Focus Data Period: Jan 2010 - Dec 2023</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="DATE">DATE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="PRICE">PRICE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.80">HI.80</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.95">HI.95</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="VAR80">VAR80</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="VAR95">VAR95</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jan 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">23.91</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">26.54</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">27.72</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">11.00%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">15.90%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Feb 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">22.95</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">27.46</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">29.13</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">19.70%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">26.90%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Mar 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">23.93</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">28.18</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">30.22</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">17.80%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">26.30%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Apr 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">26.51</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">28.78</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">31.14</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">8.60%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">17.50%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">May 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">28.18</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">29.31</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">31.96</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">4.00%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">13.40%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jun 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">31.04</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">29.80</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">32.70</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">−4.00%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">5.30%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jul 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">30.64</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">30.24</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">33.38</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">−1.30%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">8.90%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Aug 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">28.81</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">30.66</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">34.02</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">6.40%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">18.10%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Sep 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">29.54</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">31.05</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">34.62</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">5.10%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">17.20%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Oct 2024</td>
+<td headers="price" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">30.98</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">31.43</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">35.19</td>
+<td headers="var80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">1.50%</td>
+<td headers="var95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">13.60%</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+<div id="silver-forecast-next-14-months-model" class="section level3">
+<h3>Silver Forecast Next 14 Months Model</h3>
+<div id="htmlwidget-89ff97216902ce8885c4" style="width:800px;height:480px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-89ff97216902ce8885c4">{"x":{"data":[{"x":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"y":[33.247769398453443,34.179863279311554,34.74984107372336,35.374326011603813,35.890801745651771,36.207001675337445,36.541832779817163,36.845726541476985,37.339634794846958,37.68839509850492,37.990829237700495,38.385550706567393,38.605266865688321,38.856313533004254],"text":["date: 2024-11-01<br />price: 33.24777<br />levels: Hi.80<br />levels: Hi.80","date: 2024-12-01<br />price: 34.17986<br />levels: Hi.80<br />levels: Hi.80","date: 2025-01-01<br />price: 34.74984<br />levels: Hi.80<br />levels: Hi.80","date: 2025-02-01<br />price: 35.37433<br />levels: Hi.80<br />levels: Hi.80","date: 2025-03-01<br />price: 35.89080<br />levels: Hi.80<br />levels: Hi.80","date: 2025-04-01<br />price: 36.20700<br />levels: Hi.80<br />levels: Hi.80","date: 2025-05-01<br />price: 36.54183<br />levels: Hi.80<br />levels: Hi.80","date: 2025-06-01<br />price: 36.84573<br />levels: Hi.80<br />levels: Hi.80","date: 2025-07-01<br />price: 37.33963<br />levels: Hi.80<br />levels: Hi.80","date: 2025-08-01<br />price: 37.68840<br />levels: Hi.80<br />levels: Hi.80","date: 2025-09-01<br />price: 37.99083<br />levels: Hi.80<br />levels: Hi.80","date: 2025-10-01<br />price: 38.38555<br />levels: Hi.80<br />levels: Hi.80","date: 2025-11-01<br />price: 38.60527<br />levels: Hi.80<br />levels: Hi.80","date: 2025-12-01<br />price: 38.85631<br />levels: Hi.80<br />levels: Hi.80"],"type":"scatter","mode":"lines","line":{"width":4.5354330708661417,"color":"rgba(106,176,76,1)","dash":"solid"},"hoveron":"points","name":"Hi.80","legendgroup":"Hi.80","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"y":[34.428201985175285,35.985355286173707,36.942995151414401,37.863419809610001,38.653833680224665,39.227805077213837,39.799039541540935,40.321138686046339,41.020279354997818,41.563928775820663,42.051997568405433,42.624118595697276,42.997451509719951,null],"text":["date: 2024-11-01<br />price: 34.42820<br />levels: Hi.95<br />levels: Hi.95","date: 2024-12-01<br />price: 35.98536<br />levels: Hi.95<br />levels: Hi.95","date: 2025-01-01<br />price: 36.94300<br />levels: Hi.95<br />levels: Hi.95","date: 2025-02-01<br />price: 37.86342<br />levels: Hi.95<br />levels: Hi.95","date: 2025-03-01<br />price: 38.65383<br />levels: Hi.95<br />levels: Hi.95","date: 2025-04-01<br />price: 39.22781<br />levels: Hi.95<br />levels: Hi.95","date: 2025-05-01<br />price: 39.79904<br />levels: Hi.95<br />levels: Hi.95","date: 2025-06-01<br />price: 40.32114<br />levels: Hi.95<br />levels: Hi.95","date: 2025-07-01<br />price: 41.02028<br />levels: Hi.95<br />levels: Hi.95","date: 2025-08-01<br />price: 41.56393<br />levels: Hi.95<br />levels: Hi.95","date: 2025-09-01<br />price: 42.05200<br />levels: Hi.95<br />levels: Hi.95","date: 2025-10-01<br />price: 42.62412<br />levels: Hi.95<br />levels: Hi.95","date: 2025-11-01<br />price: 42.99745<br />levels: Hi.95<br />levels: Hi.95","date: 2025-12-01<br />price: 43.39449<br />levels: Hi.95<br />levels: Hi.95"],"type":"scatter","mode":"lines","line":{"width":4.5354330708661417,"color":"rgba(235,77,75,1)","dash":"solid"},"hoveron":"points","name":"Hi.95","legendgroup":"Hi.95","showlegend":true,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null},{"x":[1730419200,1730419200,1733011200,1733011200,1735689600,1735689600,1738368000,1738368000,1740787200,1740787200,1743465600,1743465600,1746057600,1746057600,1748736000,1748736000,1751328000,1751328000,1754006400,1754006400,1756684800,1756684800,1759276800,1759276800,1761955200,1761955200,1764547200,1764547200],"y":[33.247769398453443,34.428201985175285,34.179863279311554,35.985355286173707,34.74984107372336,36.942995151414401,35.374326011603813,37.863419809610001,35.890801745651771,38.653833680224665,36.207001675337445,39.227805077213837,36.541832779817163,39.799039541540935,36.845726541476985,40.321138686046339,37.339634794846958,41.020279354997818,37.68839509850492,41.563928775820663,37.990829237700495,42.051997568405433,38.385550706567393,42.624118595697276,38.605266865688321,42.997451509719951,38.856313533004254,null],"text":["date: 2024-11-01<br />price: 33.24777<br />levels: black<br />levels: Hi.80","date: 2024-11-01<br />price: 34.42820<br />levels: black<br />levels: Hi.95","date: 2024-12-01<br />price: 34.17986<br />levels: black<br />levels: Hi.80","date: 2024-12-01<br />price: 35.98536<br />levels: black<br />levels: Hi.95","date: 2025-01-01<br />price: 34.74984<br />levels: black<br />levels: Hi.80","date: 2025-01-01<br />price: 36.94300<br />levels: black<br />levels: Hi.95","date: 2025-02-01<br />price: 35.37433<br />levels: black<br />levels: Hi.80","date: 2025-02-01<br />price: 37.86342<br />levels: black<br />levels: Hi.95","date: 2025-03-01<br />price: 35.89080<br />levels: black<br />levels: Hi.80","date: 2025-03-01<br />price: 38.65383<br />levels: black<br />levels: Hi.95","date: 2025-04-01<br />price: 36.20700<br />levels: black<br />levels: Hi.80","date: 2025-04-01<br />price: 39.22781<br />levels: black<br />levels: Hi.95","date: 2025-05-01<br />price: 36.54183<br />levels: black<br />levels: Hi.80","date: 2025-05-01<br />price: 39.79904<br />levels: black<br />levels: Hi.95","date: 2025-06-01<br />price: 36.84573<br />levels: black<br />levels: Hi.80","date: 2025-06-01<br />price: 40.32114<br />levels: black<br />levels: Hi.95","date: 2025-07-01<br />price: 37.33963<br />levels: black<br />levels: Hi.80","date: 2025-07-01<br />price: 41.02028<br />levels: black<br />levels: Hi.95","date: 2025-08-01<br />price: 37.68840<br />levels: black<br />levels: Hi.80","date: 2025-08-01<br />price: 41.56393<br />levels: black<br />levels: Hi.95","date: 2025-09-01<br />price: 37.99083<br />levels: black<br />levels: Hi.80","date: 2025-09-01<br />price: 42.05200<br />levels: black<br />levels: Hi.95","date: 2025-10-01<br />price: 38.38555<br />levels: black<br />levels: Hi.80","date: 2025-10-01<br />price: 42.62412<br />levels: black<br />levels: Hi.95","date: 2025-11-01<br />price: 38.60527<br />levels: black<br />levels: Hi.80","date: 2025-11-01<br />price: 42.99745<br />levels: black<br />levels: Hi.95","date: 2025-12-01<br />price: 38.85631<br />levels: black<br />levels: Hi.80","date: 2025-12-01<br />price: 43.39449<br />levels: black<br />levels: Hi.95"],"type":"scatter","mode":"markers","marker":{"autocolorscale":false,"color":"rgba(0,0,0,1)","opacity":1,"size":5.6692913385826778,"symbol":"circle","line":{"width":1.8897637795275593,"color":"rgba(0,0,0,1)"}},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","frame":null}],"layout":{"margin":{"t":39.622526636225267,"r":7.3059360730593621,"b":21.430745814307464,"l":34.337899543379002},"plot_bgcolor":"rgba(255,255,255,1)","paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":14.611872146118724},"title":{"text":"<b> Silver Forecast Next 14 Months <\/b>","font":{"color":"rgba(48,51,107,1)","family":"","size":17.534246575342465},"x":0,"xref":"paper"},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[1728712800,1766253600],"tickmode":"array","ticktext":["Nov2024","Dec2024","Jan2025","Feb2025","Mar2025","Apr2025","May2025","Jun2025","Jul2025","Aug2025","Sep2025","Oct2025","Nov2025","Dec2025"],"tickvals":[1730419200,1733011200,1735689600,1738368000,1740787200,1743465600,1746057600,1748736000,1751328000,1754006400,1756684800,1759276800,1761955200,1764547200],"categoryorder":"array","categoryarray":["Nov2024","Dec2024","Jan2025","Feb2025","Mar2025","Apr2025","May2025","Jun2025","Jul2025","Aug2025","Sep2025","Oct2025","Nov2025","Dec2025"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"y","title":{"text":"<b>  <\/b>","font":{"color":"rgba(48,51,107,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[32.5,43.5],"tickmode":"array","ticktext":["32.5","35.0","37.5","40.0","42.5"],"tickvals":[32.5,35,37.5,40,42.5],"categoryorder":"array","categoryarray":["32.5","35.0","37.5","40.0","42.5"],"nticks":null,"ticks":"outside","tickcolor":"rgba(51,51,51,1)","ticklen":3.6529680365296811,"tickwidth":0.66417600664176002,"showticklabels":true,"tickfont":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.66417600664176002,"zeroline":false,"anchor":"x","title":{"text":"<b>  <\/b>","font":{"color":"rgba(48,51,107,1)","family":"","size":14.611872146118724}},"hoverformat":".2f"},"shapes":[{"type":"rect","fillcolor":"transparent","line":{"color":"rgba(51,51,51,1)","width":0.66417600664176002,"linetype":"solid"},"yref":"paper","xref":"paper","x0":0,"x1":1,"y0":0,"y1":1}],"showlegend":true,"legend":{"bgcolor":"rgba(255,255,255,1)","bordercolor":"transparent","borderwidth":1.8897637795275593,"font":{"color":"rgba(0,0,0,1)","family":"","size":11.68949771689498},"title":{"text":"levels","font":{"color":"rgba(48,51,107,1)","family":"","size":14.611872146118724}}},"hovermode":"closest","width":800,"barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"172416271f950":{"x":{},"y":{},"colour":{},"type":"scatter"},"172416e796dbb":{"x":{},"y":{},"colour":{}}},"cur_data":"172416271f950","visdat":{"172416271f950":["function (y) ","x"],"172416e796dbb":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div id="jknkohalxt" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#jknkohalxt table {
+  font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#jknkohalxt thead, #jknkohalxt tbody, #jknkohalxt tfoot, #jknkohalxt tr, #jknkohalxt td, #jknkohalxt th {
+  border-style: none;
+}
+
+#jknkohalxt p {
+  margin: 0;
+  padding: 0;
+}
+
+#jknkohalxt .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #A8A8A8;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#jknkohalxt .gt_title {
+  color: #333333;
+  font-size: 125%;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#jknkohalxt .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#jknkohalxt .gt_heading {
+  background-color: #FFFFFF;
+  text-align: center;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#jknkohalxt .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: normal;
+  text-transform: inherit;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#jknkohalxt .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#jknkohalxt .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#jknkohalxt .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#jknkohalxt .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#jknkohalxt .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#jknkohalxt .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#jknkohalxt .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#jknkohalxt .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#jknkohalxt .gt_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#jknkohalxt .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jknkohalxt .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#jknkohalxt .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#jknkohalxt .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#jknkohalxt .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jknkohalxt .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#jknkohalxt .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jknkohalxt .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_striped {
+  background-color: rgba(128, 128, 128, 0.05);
+}
+
+#jknkohalxt .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jknkohalxt .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#jknkohalxt .gt_sourcenote {
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#jknkohalxt .gt_left {
+  text-align: left;
+}
+
+#jknkohalxt .gt_center {
+  text-align: center;
+}
+
+#jknkohalxt .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#jknkohalxt .gt_font_normal {
+  font-weight: normal;
+}
+
+#jknkohalxt .gt_font_bold {
+  font-weight: bold;
+}
+
+#jknkohalxt .gt_font_italic {
+  font-style: italic;
+}
+
+#jknkohalxt .gt_super {
+  font-size: 65%;
+}
+
+#jknkohalxt .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#jknkohalxt .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#jknkohalxt .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#jknkohalxt .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#jknkohalxt .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#jknkohalxt .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#jknkohalxt .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#jknkohalxt .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#jknkohalxt div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+  <thead>
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_title gt_font_normal" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Detect Last 10 Months Model</td>
+    </tr>
+    <tr class="gt_heading">
+      <td colspan="4" class="gt_heading gt_subtitle gt_font_normal gt_bottom_border" style="background-color: #A0937D; color: #FFFFFF; text-align: center; font-weight: bold;">Focus Data Period: Jan 2010 - Dec 2023</td>
+    </tr>
+    <tr class="gt_col_headings">
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="DATE">DATE</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.80">HI.80</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="HI.95">HI.95</th>
+      <th class="gt_col_heading gt_columns_bottom_border gt_right" rowspan="1" colspan="1" style="background-color: #E7D4B5; text-align: center; font-weight: bold;" scope="col" id="VAR">VAR</th>
+    </tr>
+  </thead>
+  <tbody class="gt_table_body">
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Nov 2024</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$33.25</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$34.43</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">4.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Dec 2024</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$34.18</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$35.99</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">5.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jan 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$34.75</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$36.94</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">6.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Feb 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$35.37</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$37.86</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">7.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Mar 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$35.89</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$38.65</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">8.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Apr 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$36.21</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$39.23</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">8.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">May 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$36.54</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$39.80</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">9.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jun 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$36.85</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$40.32</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">9.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Jul 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$37.34</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$41.02</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">10.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Aug 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$37.69</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$41.56</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">10.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Sep 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$37.99</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$42.05</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">11.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Oct 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$38.39</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$42.62</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">11.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Nov 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$38.61</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$43.00</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">11.00%</td></tr>
+    <tr><td headers="date" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">Dec 2025</td>
+<td headers="Hi.80" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$38.86</td>
+<td headers="Hi.95" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">$43.39</td>
+<td headers="var" class="gt_row gt_right" style="color: #7F8C8D; text-align: center; font-weight: bold;">12.00%</td></tr>
+  </tbody>
+  
+  
+</table>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
