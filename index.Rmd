@@ -63,19 +63,20 @@ data.frame(Date= seq(as.Date("2024-11-01"),len=14,by="month"))
 
 model_chart<-
 model %>% 
-mutate(Date=as.POSIXct(Date)) %>% 
-pivot_longer(!Date,names_to = "Levels",values_to = "Prices") %>% 
+pivot_longer(!Date,names_to = "Levels",values_to = "Prices") %>% mutate(Date=as.POSIXct(Date)) %>% 
 ggplot(aes(x=Date,y=Prices,color=Levels,group=Levels))+
 geom_line(size=1)+geom_point(color="black",size=1)+
-scale_color_manual(values = c("#d35400","#16a085"))+
+geom_label(aes(label=round(Prices/1000,2)),nudge_x = 0.25,nudge_y = 0.25)+
+scale_color_manual(values = c("#c23616","#192a56"))+
 labs(x="",y="",title = "Gold Forecast Model Next 14 Month",
-subtitle ="Focus Data Period: Oct 2014 - Sep 2024" )+
+subtitle ="Focus Data Period: Oct 2014 - Sep 2024" ,caption = "Labels in Thousands")+
 scale_y_continuous(labels = comma)+theme_bw()+
-scale_x_datetime(date_breaks = "month",date_labels = "%b%y")+
+scale_x_datetime(date_breaks = "month",date_labels = "%b")+
 theme(axis.text.x = element_text(face = "bold",colour = "black",size = 10),
 axis.text.y = element_text(face = "bold",colour = "black",size = 10),
-title = element_text(face = "bold",colour = "#2c3e50"))
-  
+title = element_text(face = "bold",colour = "#2c3e50"),
+legend.position = "top")
+
   
 model_tbl<-
 model %>% gt() %>% tab_header(title = "Gold Forecast Arima Model ",
@@ -126,11 +127,12 @@ silver_detect_chart<-
 sl_last %>% 
 pivot_longer(!mn,names_to = "levels",values_to = "prices") %>% 
 mutate(mn=as.POSIXct(mn)) %>% 
-ggplot(aes(x=mn,y=prices,color=levels,group=levels))+
-geom_line(size=1)+geom_point()+scale_color_manual(values =  c("#30336b","#6ab04c","#eb4d4b"))+
-labs(x="",y="",title = "Silver Detect Last 10 Months Prices Model")+
-theme_classic()+theme(axis.text.x = element_text(colour = "black",face = "bold"),
-                      axis.text.y = element_text(colour = "black",face = "bold"))+scale_x_datetime(date_breaks = "month",date_labels = "%B")
+ggplot(aes(x=mn,y=round(prices,2),color=levels,group=levels))+
+geom_line(size=1)+geom_point()+scale_color_manual(values =  c("#2f3640","#40739e","#c23616"))+
+labs(x="",y="",title = "Silver Detect Last 10 Months Prices Model",subtitle = "Data Focus Period: Jan 2010 - Dec 2023")+
+theme_classic()+theme(axis.text.x = element_text(colour = "black",face = "bold"),axis.text.y = element_text(colour = "black",face = "bold"),legend.position = "top",title = element_text(size=14,color="#2f3640",face = "bold"))+
+scale_x_datetime(date_breaks = "month",date_labels = "%b")+
+geom_label(aes(label = round(prices,2)),nudge_x = 0.25,nudge_y = 0.25)
 
 
 silver_detect_tbl<-
@@ -162,10 +164,11 @@ rownames_to_column(data.frame(mn_slfar)) %>% select(c(4,6))
 ) %>% 
 rename(date=mn) %>% mutate(date=as.POSIXct(date)) %>% pivot_longer(!date,names_to ="levels" ,values_to = "price") %>% 
 ggplot(aes(x=date,y=price,color=levels,group =levels))+geom_line(size=1.2)+
-geom_point(color="black") +scale_color_manual(values = c("#6ab04c","#eb4d4b","#30336b"))+
-scale_x_datetime(date_breaks ="month" ,date_labels = "%b%Y")+labs(x="",y="",title = "Silver Forecast Next 14 Months")+scale_y_continuous(limits = c(33,43))+
+geom_point(color="black") +scale_color_manual(values = c("#c23616","#30336b"))+
+scale_x_datetime(date_breaks ="month" ,date_labels = "%b")+labs(x="",y="",title = "Silver Forecast Next 14 Months",subtitle = "Data Foucus Period: Jan 2010 - Oct 2024")+scale_y_continuous(limits = c(33,43))+
 theme_bw()+theme(axis.text.x = element_text(colour = "black",face = "bold"),
-axis.text.y = element_text(colour = "black",face = "bold"),title = element_text(colour = "#30336b",face = "bold"))
+axis.text.y = element_text(colour = "black",face = "bold"),title = element_text(colour = "#30336b",face = "bold"),legend.position = "top")+
+geom_label(aes(label = round(price,2)),nudge_x = 0.25,nudge_y = 0.25)+scale_y_continuous(limits = c(33,44.5))
 
 
 silver_Model_tbl<-
@@ -185,21 +188,34 @@ rename(date=mn) %>% mutate(var=round(Hi.95/Hi.80,2)-1) %>% gt()%>% fmt_number(co
 
 ```
 
+------------------------------------------------------------
+
+
+--------------------------------------------------------------
 
 
 ### Gold Forecast Model
  
 
 ```{r echo=FALSE,warning=FALSE,message=FALSE}
-ggplotly( model_chart,width=800)
+model_chart
 
 ```
+
+
+------------------------------------------------------------
+
+------------------------------------------------------------
 
  
 ```{r echo=FALSE,message=FALSE,warning=FALSE}
 model_tbl
 ```
 
+
+---------------------------------------------------------------
+
+------------------------------------------------------------
 
 
 ### Silver Last Detect Model
@@ -209,10 +225,19 @@ autoplot(decompose(diff(sl_ts)))
 
 ```
 
+----------------------------------------------------------------
+
+------------------------------------------------------------
+
 
 ```{r echo=FALSE,message=FALSE,warning=FALSE}
-ggplotly( silver_detect_chart, width=800)
+silver_detect_chart
 ```
+
+
+----------------------------------------------------------------
+
+------------------------------------------------------------
 
 
 ```{r warning=FALSE,message=FALSE,echo=FALSE}
@@ -220,15 +245,30 @@ silver_detect_tbl
 ```
 
 
+---------------------------------------------------------------
+
+------------------------------------------------------------
+
+
+
 ### Silver Forecast Next 14 Months Model 
 
 ```{r echo=FALSE,message=FALSE,warning=FALSE}
-ggplotly( silver_Model_Chart,width=800)
+silver_Model_Chart
 ```
+
+----------------------------------------------------------------
+
+------------------------------------------------------------
+
+
 
 
 ```{r message=FALSE,echo=FALSE,warning=FALSE}
 silver_Model_tbl
 ```
 
+------------------------------------------------------------
+
+------------------------------------------------------------
 
