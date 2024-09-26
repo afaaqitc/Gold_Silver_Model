@@ -253,8 +253,10 @@ silver_detect_tbl
 
 ### Silver Forecast Next 14 Months Model 
 
-```{r echo=FALSE,message=FALSE,warning=FALSE}
+```{r echo=FALSE,message=FALSE,warning=FALSE,fig.align='center'}
+
 silver_Model_Chart
+
 ```
 
 ----------------------------------------------------------------
@@ -265,7 +267,7 @@ silver_Model_Chart
 
 
 ```{r message=FALSE,echo=FALSE,warning=FALSE}
-silver_Model_tbl
+ silver_Model_tbl
 ```
 
 ------------------------------------------------------------
